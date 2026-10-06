@@ -52,16 +52,16 @@ apps/google/apps/WebViewGoogle.apk  arm64/google/apps/WebViewGoogle.apk  replace
   edits to it are overwritten, files Google removed are deleted. Local-only files are kept
   either way. The PR description lists the overwritten files.
 
-To write a first map, scan the repo against the build it was made from:
+To start a map, list what is in a directory of a local checkout of the repo:
 
 ```sh
-python3 scan_repo.py <current_build> [-t main] [-s rebase] [-o gms-map.txt] [--force]
+python3 scan_repo.py <path/to/repo/dir> [-s rebase] [-o gms-map.txt] [--force]
 ```
 
-It finds each zip file in the target branch by content (git blob or LFS object), or by path
-when it was edited locally, and folds the matches into directory lines plus one line per file
-that lives elsewhere. Zip files not found in the repo are listed as comments, so
-`update_repo.py` won't run until they're mapped. Check the strategies before using the map.
+It writes one line per file and folder under that path, subfolders included (folders with
+no files directly in them are skipped). The zip column repeats the path with its folder in `<>`, e.g.
+`etc/gms/android.bp  <etc/gms>/android.bp`, so you can search-and-replace `<etc/gms>` with
+the `<arch>/<path in zip>` it comes from. `update_repo.py` won't run until every `<...>` is replaced.
 
 With `rebase`, local edits in the repo are kept:
 
