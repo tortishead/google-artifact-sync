@@ -1,0 +1,20 @@
+# Where update_repo.py puts the files from Google's zips, and how it merges them.
+#
+#   <repo path>   <arch>/<path in zip>   <strategy>
+#
+# A path ending in / maps a directory: everything under it, keeping the rest of
+# the path. Otherwise it maps one file. When several lines match a zip entry, the
+# one with the longest zip path wins. Every file in the zips must be mapped.
+#
+# Strategies:
+#   rebase   keep local edits: apply only what Google changed between the builds
+#            (3-way merge; stops on a conflict)
+#   replace  Google's file wins: local edits are overwritten, and files Google
+#            removed are deleted
+
+apps/google/            arm64/google/            rebase
+apps_x86_64/google/     x86_64/google/           rebase
+
+# Examples:
+# apps/google/apps/WebViewGoogle.apk   arm64/google/apps/WebViewGoogle.apk   replace
+# apps/google/products/sku/            arm64/google/products/sku/            replace
